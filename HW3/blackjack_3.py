@@ -100,7 +100,6 @@ def episode():
     return (reward, history)
 
 
-# Monte Carlo off policy
 def monte_carlo(episodes):
 
     ratios = []
@@ -147,14 +146,13 @@ def plot():
         e[1,:] += (s2 - -0.27726)**2
 
 
-    plt.plot(e[0]/100, label='Ordinary Importance Sampling')
-    plt.plot(e[1]/100, label='Weighted Importance Sampling')
-    plt.xlabel('Episodes (log scale)')
-    plt.ylabel('Mean square error')
+    plt.plot(e[0]/100)
+    plt.plot(e[1]/100)
+    plt.xlabel('Episodes')
+    plt.ylabel('MSE')
     plt.xscale('log')
-    plt.legend()
-
-    plt.savefig('./figure_5_3_new.png')
+    plt.legend(['Ordinary Importance Sampling','Weighted Importance Sampling'])
+    plt.savefig('./figure_5_3_new1.png')
     plt.close()
 
 

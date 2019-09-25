@@ -30,15 +30,13 @@ def mc(episodes, alpha):
         state = 3
         history = [3]
         while (state != 0 and state != 6):
-            history.append(state)
             step = -1 if not np.random.randint(2) else 1
-            next_state = state + step
-            history.append(next_state)
-            state=next_state
+            state = state + step
             reward = 1 if state == 6 else 0
-
+            history.append(state)
+        # print(history[-1],reward)
         for i in reversed(history):
-            values[i] = values[i] + alpha * (reward - values[i])
+            values[i] += alpha * (reward - values[i])
         total.append(np.copy(values))
     return (values, total)
 
@@ -70,28 +68,28 @@ def plot2():
             a = arr[i, :]
             e = math.sqrt(np.mean(np.square(a - true_values)))
             errors.append(e)
-        return (errors)
+        return (np.array(errors))
 
     xlabels = [i for i in range(100)]
 
     for alpha in [0.01, 0.02, 0.03, 0.04]:
-        mct = np.zeros((100, 7))
+        mct = np.zeros((100))
         for j in range(100):
             _, m = mc(100, alpha)
-            mct += np.array(m).reshape(100, 7)/100
+            mct += error(np.array(m).reshape(100, 7))/100
         # mct /= 100
-        plt.plot(xlabels, error(mct))
+        plt.plot(xlabels, mct.ravel())
 
     for alpha in [0.05, 0.1, 0.15]:
-        tdt = np.zeros((100, 7))
+        tdt = np.zeros((100))
         for j in range(100):
             _, t = td0(100, alpha)
-            tdt += np.array(t).reshape(100, 7)
-        tdt /= 100
-        plt.plot(xlabels, error(tdt))
+            tdt += error(np.array(t).reshape(100, 7))/100
+        # tdt /= 100
+        plt.plot(xlabels, tdt.ravel())
     plt.legend(['MC 0.01', 'MC 0.02', 'MC 0.03', 'MC 0.04', 'TD 0.05', 'TD 0.1', 'TD 0.15'], loc='upper left')
-    plt.savefig('./q6-new.png')
+    plt.savefig('./q6-new1.png')
 
 
-plot1()
+# plot1()
 plot2()
